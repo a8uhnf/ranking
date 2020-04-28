@@ -6,31 +6,23 @@ import (
 	"math/big"
 	"time"
 	
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/prometheus/common/log"
+	
+	"github.com/a8uhnf/ranking/helpers"
 )
 
 func main() {
 	fmt.Println("starting ranking server...")
 	
-	client, err := ethclient.Dial("wss://ropsten.infura.io/ws/v3/02bad7322763476ea8d4ce4642f3861a")
+	client, err := helpers.GetInfuraClient()
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
+		return
 	}
 	
-	headers := make(chan *types.Header)
-	_, err = client.SubscribeNewHead(context.Background(), headers)
-	if err != nil {
-		log.Fatal(err)
-	}
 	
 	var latestBlockNumber *big.Int
 	
-	header := <-headers
-	fmt.Println(header.Hash().Hex()) // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
-	
-	// break
 	block, err := client.BlockByNumber(context.Background(), nil)
 	if err != nil {
 		log.Fatal(err)
