@@ -32,5 +32,6 @@ func getAccountBalance(to string) error {
 		return err
 	}
 	fmt.Printf("got balance %v\n", balance)
+	return nil
 	
 }
